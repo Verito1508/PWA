@@ -1,0 +1,14 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gateway-service
+
+# Config del gateway
+gw:
+  backends:
+    - http://localhost:8082   # S1
+    - http://localhost:8083   # S2
+  requestTimeoutMillis: 30000
+
+management.endpoints.web.exposure.include: health,info

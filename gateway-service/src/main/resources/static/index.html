@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>☕ Cafetería — Panel</title>
+
+  <!-- 🔗 Manifest e ícono -->
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#0b1020">
+  <link rel="icon" href="/icons/icon-192.png">
+
+  <style>
+    :root{
+      --bg1:#0b1020; --bg2:#151b2f;
+      --glass:#0f1629cc; --stroke:#243045; --muted:#9aa6bf;
+      --fg:#e8eefc; --accent:#79a8ff; --accent-2:#52f1a8; --warn:#ff8c69;
+      --chip:#0e1a33; --chip-b:#2d3d5f; --ok:#22c55e; --err:#ef4444;
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial;
+      color:var(--fg);
+      background: radial-gradient(1000px 700px at 20% -10%, #213159 0%, transparent 60%),
+                  radial-gradient(900px 600px at 100% 0%, #1b2a4d 0%, transparent 60%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+    }
+    .wrap{max-width:1100px;margin:36px auto;padding:0 18px}
+    .hero{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+    .title{display:flex;align-items:center;gap:12px}
+    .title h1{font-size:28px;letter-spacing:.3px;margin:0}
+    .badge{font-size:12px;color:var(--muted);padding:6px 10px;border-radius:999px;border:1px solid var(--stroke);background:var(--chip)}
+    .card{
+      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, #101a31aa, #0c1427aa);
+      backdrop-filter:blur(6px);
+      border-radius:var(--radius);
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      padding:18px;
+    }
+    .card h2{margin:0 0 14px;font-size:18px;color:#cfe0ff}
+    .grid{display:grid;gap:12px}
+    @media(min-width:900px){ .grid.cols-2{grid-template-columns:1fr 1fr} }
+    @media(min-width:1100px){ .grid.cols-3{grid-template-columns:repeat(3,1fr)} }
+    label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+    input,select{
+      width:100%;padding:12px 14px;border-radius:12px;
+      border:1px solid var(--stroke);background:#0b1428;color:var(--fg);
+      outline:none; transition:border-color .15s ease, box-shadow .15s ease;
+    }
+    input:focus,select:focus{border-color:#3b82f6; box-shadow:0 0 0 3px #3b82f633}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      padding:12px 16px;border-radius:14px;border:1px solid #3b82f6;background:#3b82f6;
+      color:white;font-weight:700;cursor:pointer;transition:transform .05s ease, filter .2s
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn.ghost{background:#0b1428;border-color:var(--stroke);color:#cfe0ff}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{padding:8px 10px;border-radius:999px;border:1px solid var(--stroke);background:var(--chip);color:#cbd6f5;font-size:12px}
+    .stat{display:grid;gap:6px;padding:12px;border:1px dashed var(--stroke);border-radius:12px;background:#0b1428}
+    pre{
+      background:#0b1428; border:1px dashed var(--stroke);
+      color:#d7e5ff; padding:14px;border-radius:14px;margin:0;white-space:pre-wrap;word-break:break-word;font-size:13px;line-height:1.6
+    }
+    .hint{color:var(--muted);font-size:12px}
+    .switch{display:flex;align-items:center;gap:8px}
+    .footer{margin-top:10px;color:#7e8bad;font-size:12px}
+    .kpi-ok{color:var(--ok)} .kpi-err{color:var(--err)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="title">
+        <div style="font-size:24px">☕</div>
+        <div>
+          <h1>Cafetería — Panel</h1>
+          <div id="banner" class="badge">UI cargando…</div>
+        </div>
+      </div>
+      <div class="chips">
+        <span class="chip">Gateway: <strong>8080</strong></span>
+        <span class="chip">S1: <strong>8082</strong></span>
+        <span class="chip">S2: <strong>8083</strong></span>
+      </div>
+    </div>
+
+    <!-- Estado -->
+    <div class="card">
+      <h2>Estado de la sucursal</h2>
+      <div class="grid" style="grid-template-columns:repeat(4,minmax(140px,1fr));gap:12px">
+        <div class="stat"><label>Branch</label><div id="st-branch">—</div></div>
+        <div class="stat"><label>Baristas</label><div id="st-baristas">—</div></div>
+        <div class="stat"><label>En cola</label><div id="st-queue">—</div></div>
+        <div class="stat"><label>Atendidos</label><div id="st-done">—</div></div>
+      </div>
+      <div class="footer" id="servedBy"></div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="grid cols-2" style="margin-top:14px">
+      <div class="card">
+        <h2>Crear pedido</h2>
+        <div class="grid cols-2">
+          <div><label>Cliente</label><input id="cliente" placeholder="Cliente-01" /></div>
+          <div><label>Tipo de bebida</label><input id="tipo" placeholder="Latte / Mocha / Americano" /></div>
+          <div><label>Timeout (seg)</label><input id="timeout" type="number" value="20" min="1" /></div>
+          <div><label>Sucursal</label>
+            <select id="branch">
+              <option value="1">Sucursal 1</option>
+              <option value="2">Sucursal 2</option>
+            </select>
+          </div>
+          <div class="switch">
+            <input type="checkbox" id="useRR" />
+            <label for="useRR">Usar balanceo (sin branchId)</label>
+          </div>
+          <div class="hint">Si está activado, el gateway decide por round-robin.</div>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <button class="btn" id="btnEnviar">Enviar pedido</button>
+          <button class="btn ghost" id="btnRandom">Pedido aleatorio</button>
+          <span class="hint">Endpoint: <code>POST /api/orders</code></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Última respuesta</h2>
+        <pre id="out">—</pre>
+        <div class="hint">Tip: abre también <code>http://localhost:8082/</code> para S1.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const out = document.getElementById('out');
+    const banner = document.getElementById('banner');
+    const servedBy = document.getElementById('servedBy');
+    const branchSel = document.getElementById('branch');
+    const useRR = document.getElementById('useRR');
+    const inputCliente = document.getElementById('cliente');
+    const inputTipo = document.getElementById('tipo');
+    const inputTimeout = document.getElementById('timeout');
+    const btnEnviar = document.getElementById('btnEnviar');
+    const btnRandom = document.getElementById('btnRandom');
+
+    const bebidas = ['Latte','Mocha','Cappuccino','Americano','Espresso','Frappe','Chai'];
+    const rnd = a => a[Math.floor(Math.random()*a.length)];
+
+    function updateBanner(){
+      banner.textContent = useRR.checked
+        ? `UI en ${location.origin} · modo: Round-robin`
+        : `UI en ${location.origin} · sucursal seleccionada: S${branchSel.value}`;
+    }
+    updateBanner();
+    branchSel.addEventListener('change', updateBanner);
+    useRR.addEventListener('change', updateBanner);
+
+    function urlWithBranch(path){
+      if (useRR.checked) return path;
+      const u = new URL(path, location.origin);
+      u.searchParams.set('branchId', String(branchSel.value));
+      return u.toString().replace(location.origin, '');
+    }
+
+    async function crearOrden(payload){
+      servedBy.textContent = '';
+      out.textContent = 'Enviando…';
+      try{
+        const url = urlWithBranch('/api/orders');
+        const r = await fetch(url, {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const text = await r.text();
+        let j; try { j = JSON.parse(text); } catch { j = text; }
+        const served = r.headers.get('X-Served-By');
+        out.textContent = JSON.stringify(j, null, 2);
+        if (served) servedBy.innerHTML = `Atendido por: <strong>${served}</strong>`;
+      }catch(e){
+        out.textContent = 'Error: '+e.message;
+      }
+    }
+
+    btnEnviar.addEventListener('click', ()=> {
+      const data = {
+        cliente: inputCliente.value || 'Cliente-01',
+        tipo: inputTipo.value || 'Latte',
+        timeout: Number(inputTimeout.value) || 20
+      };
+      crearOrden(data);
+    });
+
+    btnRandom.addEventListener('click', ()=> {
+      crearOrden({ cliente: 'Cliente-'+Math.floor(100+Math.random()*900), tipo: rnd(bebidas), timeout: 20 });
+    });
+
+    async function refreshStatus(){
+      try{
+        const url = urlWithBranch('/api/status');
+        const r = await fetch(url);
+        const s = await r.json();
+        document.getElementById('st-branch').textContent   = s.branchId ?? '—';
+        document.getElementById('st-baristas').textContent = s.baristas ?? '—';
+        document.getElementById('st-queue').textContent    = s.queueSize ?? '—';
+        document.getElementById('st-done').textContent     = s.completed ?? '—';
+      }catch{}
+    }
+    refreshStatus();
+    setInterval(refreshStatus, 2000);
+
+    // 🔹 Registrar Service Worker (PWA)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .catch(err => console.log('SW registro falló:', err));
+      });
+    }
+  </script>
+</body>
+</html>

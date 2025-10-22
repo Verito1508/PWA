@@ -1,0 +1,16 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: cafe-service
+
+cafe:
+  branchId: 1
+  baristas: 3
+  pLento: 0.25
+  rangoRapidoMin: 2.0
+  rangoRapidoMax: 4.0
+  rangoLentoMin: 6.0
+  rangoLentoMax: 10.0
+  factorTiempo: 1.2
+  coordinatorBaseUrl: http://localhost:8081
