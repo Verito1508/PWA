@@ -146,25 +146,34 @@
     const inputTimeout = document.getElementById('timeout');
     const btnEnviar = document.getElementById('btnEnviar');
     const btnRandom = document.getElementById('btnRandom');
+    // 🔗 Gateway en Azure (backend)
+    const API_ORIGIN = 'https://gateway-vero-practica6.cncjd9dwfafabpba.mexicocentral.azurecontainer.io';
 
     const bebidas = ['Latte','Mocha','Cappuccino','Americano','Espresso','Frappe','Chai'];
     const rnd = a => a[Math.floor(Math.random()*a.length)];
 
     function updateBanner(){
-      banner.textContent = useRR.checked
-        ? `UI en ${location.origin} · modo: Round-robin`
-        : `UI en ${location.origin} · sucursal seleccionada: S${branchSel.value}`;
-    }
-    updateBanner();
-    branchSel.addEventListener('change', updateBanner);
-    useRR.addEventListener('change', updateBanner);
+          banner.textContent = useRR.checked
+            ? `UI en ${location.origin} · modo: Round-robin`
+            : `UI en ${location.origin} · sucursal seleccionada: S${branchSel.value}`;
+        }
+        updateBanner();
+        branchSel.addEventListener('change', updateBanner);
+        useRR.addEventListener('change', updateBanner);
 
-    function urlWithBranch(path){
-      if (useRR.checked) return path;
-      const u = new URL(path, location.origin);
-      u.searchParams.set('branchId', String(branchSel.value));
-      return u.toString().replace(location.origin, '');
+        function urlWithBranch(path){
+      // Siempre construimos la URL contra el gateway en Azure
+      const u = new URL(path, API_ORIGIN);
+
+      // Si NO usamos round-robin, mandamos el branchId
+      if (!useRR.checked) {
+        u.searchParams.set('branchId', String(branchSel.value));
+      }
+
+      // Devolvemos la URL completa (absoluta)
+      return u.toString();
     }
+
 
     async function crearOrden(payload){
       servedBy.textContent = '';

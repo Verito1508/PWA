@@ -12,7 +12,8 @@ const STATIC_ASSETS = [
 
 // Install: pre-cache estáticos
 self.addEventListener('install', e => {
-  consologe.log('Service Worker: Install');
+  console.log('Service Worker: Install');
+
   e.waitUntil(caches.open(STATIC_CACHE).then(c => c.addAll(STATIC_ASSETS)));
   self.skipWaiting();
 });
