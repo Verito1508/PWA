@@ -147,7 +147,7 @@
     const btnEnviar = document.getElementById('btnEnviar');
     const btnRandom = document.getElementById('btnRandom');
     // 🔗 Gateway en Azure (backend)
-    const API_ORIGIN = 'https://gateway-vero-practica6.cncjd9dwfafabpba.mexicocentral.azurecontainer.io';
+    const GW_BASE = 'http://gateway-vero-practica6.cncjd9dwfafabpba.mexicocentral.azurecontainer.io:8080';
 
     const bebidas = ['Latte','Mocha','Cappuccino','Americano','Espresso','Frappe','Chai'];
     const rnd = a => a[Math.floor(Math.random()*a.length)];
@@ -161,18 +161,19 @@
         branchSel.addEventListener('change', updateBanner);
         useRR.addEventListener('change', updateBanner);
 
-        function urlWithBranch(path){
-      // Siempre construimos la URL contra el gateway en Azure
-      const u = new URL(path, API_ORIGIN);
+      function urlWithBranch(path) {
+        // path = '/api/orders' o '/api/status'
+        const u = new URL(path, GW_BASE);
 
-      // Si NO usamos round-robin, mandamos el branchId
-      if (!useRR.checked) {
-        u.searchParams.set('branchId', String(branchSel.value));
+        if (!useRR.checked) {
+          // Si NO está activado round-robin, mandamos el branchId
+          u.searchParams.set('branchId', String(branchSel.value));
+        }
+
+        // Ejemplo: http://gateway-...:8080/api/status?branchId=1
+        return u.toString();
       }
 
-      // Devolvemos la URL completa (absoluta)
-      return u.toString();
-    }
 
 
     async function crearOrden(payload){
