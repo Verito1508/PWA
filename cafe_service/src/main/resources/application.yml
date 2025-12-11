@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8080
 spring:
   application:
     name: cafe-service
@@ -13,4 +13,4 @@ cafe:
   rangoLentoMin: 6.0
   rangoLentoMax: 10.0
   factorTiempo: 1.2
-  coordinatorBaseUrl: http://cafe-service-pwa
+  coordinatorBaseUrl: http://coordinator-service-pwa.internal.politesky-282ace02.westus2.azurecontainerapps.io
