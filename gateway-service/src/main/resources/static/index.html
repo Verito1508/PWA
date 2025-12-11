@@ -129,7 +129,7 @@
       <div class="card">
         <h2>Última respuesta</h2>
         <pre id="out">—</pre>
-        <div class="hint">Tip: abre también <code>http://coordinator-service-pwa</code> para S1.</div>
+        <div class="hint">Tip: en local puedes abrir también el coordinator para ver los logs.</div>
       </div>
     </div>
   </div>
@@ -169,7 +169,6 @@
           u.searchParams.set('branchId', String(branchSel.value));
         }
 
-        // Ejemplo: http://gateway-...:8080/api/status?branchId=1
         return u.toString();
       }
 

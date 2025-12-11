@@ -7,10 +7,11 @@ spring:
 # Config del gateway
 gw:
   backends:
-    - http://coordinator-service-pwa
-    - http://coordinator-service-pwa   # S2 (puedes repetir o usar otra instancia si la tuvieras)
-
+    - http://cafe-service-pwa.internal.politesky-282ace02.westus2.azurecontainerapps.io
+    - http://cafe-service-pwa.internal.politesky-282ace02.westus2.azurecontainerapps.io
 
   requestTimeoutMillis: 30000
+
+
 
 management.endpoints.web.exposure.include: health,info
