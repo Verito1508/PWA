@@ -82,9 +82,7 @@
         </div>
       </div>
       <div class="chips">
-        <span class="chip">Gateway: <strong>8080</strong></span>
-        <span class="chip">S1: <strong>8082</strong></span>
-        <span class="chip">S2: <strong>8083</strong></span>
+        <span class="chip">Coordinator: <strong>8081</strong></span>
       </div>
     </div>
 
@@ -147,7 +145,7 @@
     const btnEnviar = document.getElementById('btnEnviar');
     const btnRandom = document.getElementById('btnRandom');
     // 🔗 Gateway en Azure (backend)
-    const GW_BASE = 'http://gateway-vero-practica6.cncjd9dwfafabpba.mexicocentral.azurecontainer.io:8080';
+    const GW_BASE = 'http://pwa-coordinator.e3gqcugmf8exadbd.centralus.azurecontainer.io:8081';
 
     const bebidas = ['Latte','Mocha','Cappuccino','Americano','Espresso','Frappe','Chai'];
     const rnd = a => a[Math.floor(Math.random()*a.length)];
