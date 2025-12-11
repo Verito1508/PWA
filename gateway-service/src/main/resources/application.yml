@@ -7,8 +7,10 @@ spring:
 # Config del gateway
 gw:
   backends:
-    - http://localhost:8082   # S1
-    - http://localhost:8083   # S2
+    - http://coordinator-service-pwa
+    - http://coordinator-service-pwa   # S2 (puedes repetir o usar otra instancia si la tuvieras)
+
+
   requestTimeoutMillis: 30000
 
 management.endpoints.web.exposure.include: health,info

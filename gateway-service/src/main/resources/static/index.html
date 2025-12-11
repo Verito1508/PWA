@@ -129,7 +129,7 @@
       <div class="card">
         <h2>Última respuesta</h2>
         <pre id="out">—</pre>
-        <div class="hint">Tip: abre también <code>http://localhost:8082/</code> para S1.</div>
+        <div class="hint">Tip: abre también <code>http://coordinator-service-pwa</code> para S1.</div>
       </div>
     </div>
   </div>
@@ -145,8 +145,8 @@
     const inputTimeout = document.getElementById('timeout');
     const btnEnviar = document.getElementById('btnEnviar');
     const btnRandom = document.getElementById('btnRandom');
-    // 🔗 Gateway en Azure (backend)
-    const GW_BASE = 'http://pwa-coordinator.e3gqcugmf8exadbd.centralus.azurecontainer.io:8081';
+    // 🔗 Gateway: mismo origen donde está sirviendo la PWA
+    const GW_BASE = window.location.origin;
 
     const bebidas = ['Latte','Mocha','Cappuccino','Americano','Espresso','Frappe','Chai'];
     const rnd = a => a[Math.floor(Math.random()*a.length)];

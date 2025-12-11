@@ -13,4 +13,4 @@ cafe:
   rangoLentoMin: 6.0
   rangoLentoMax: 10.0
   factorTiempo: 1.2
-  coordinatorBaseUrl: http://localhost:8081
+  coordinatorBaseUrl: http://cafe-service-pwa
