@@ -7,9 +7,8 @@ spring:
 # Config del gateway
 gw:
   backends:
-    - http://cafe-service-pwa.internal.politesky-282ace02.westus2.azurecontainerapps.io
-    - http://cafe-service-pwa.internal.politesky-282ace02.westus2.azurecontainerapps.io
-
+    - http://coordinator-service-pwa.internal.politesky-282ace02.westus2.azurecontainerapps.io
+    - http://coordinator-service-pwa.internal.politesky-282ace02.westus2.azurecontainerapps.io
   requestTimeoutMillis: 30000
 
 
